@@ -32,6 +32,30 @@ a{color:inherit}
 .contact-btn{display:inline-flex;align-items:center;gap:6px;padding:7px 10px;text-decoration:none;border:.5px solid var(--rule);background:var(--paper);font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--ink2);transition:.15s}
 .contact-btn:hover{border-color:var(--ink2);color:var(--ink);transform:translateY(-1px)}
 .contact-btn svg{flex:none}
+.app-tabs{display:flex;gap:4px;margin-left:auto;margin-right:10px}
+.app-tab{font:inherit;border:none;background:transparent;color:var(--ink3);padding:8px 11px;font-size:10px;text-transform:uppercase;letter-spacing:.08em;cursor:pointer;border-bottom:2px solid transparent}
+.app-tab:hover{color:var(--ink)}
+.app-tab.active{color:var(--ink);border-bottom-color:var(--accent)}
+.app-view{display:none}.app-view.active{display:block}
+.model-hero{padding:72px 0 28px;border-bottom:1.5px solid var(--rule2)}
+.model-hero h1{font-family:'Source Serif 4',serif;font-size:clamp(46px,7vw,84px);line-height:.95;letter-spacing:-.05em}
+.model-hero p{font-family:'Source Serif 4',serif;font-size:22px;color:var(--ink2);max-width:850px;margin-top:18px}
+.model-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.model-panel{background:var(--paper);border:.5px solid var(--rule);padding:20px}
+.model-panel h3{font-family:'Source Serif 4',serif;font-size:26px;margin-bottom:6px}
+.model-panel .sub{font-size:12px;color:var(--ink3);margin-bottom:16px}
+.input-table{width:100%;min-width:0}
+.input-table td,.input-table th{padding:8px 7px}
+.input-table input{width:100%;border:.5px solid var(--rule);background:var(--elev);padding:7px 8px;font:inherit;color:var(--ink);text-align:right}
+.model-kpis{display:grid;grid-template-columns:repeat(4,1fr);border:.5px solid var(--rule);background:var(--paper);margin:18px 0}
+.model-kpi{padding:16px;border-right:.5px solid var(--rule)}
+.model-kpi:last-child{border-right:none}
+.model-kpi .label{font-size:10px;text-transform:uppercase;letter-spacing:.09em;color:var(--ink3)}
+.model-kpi .value{font-family:'Source Serif 4',serif;font-size:30px;font-weight:600;margin-top:4px}
+.model-note{font-size:12px;color:var(--ink2);background:var(--elev);border-left:2px solid var(--amber);padding:12px 14px;margin-top:18px}
+.output-positive{color:var(--green)} .output-negative{color:var(--red)}
+@media(max-width:900px){.app-tabs{display:none}.model-grid,.model-kpis{grid-template-columns:1fr 1fr}}
+@media(max-width:560px){.model-grid,.model-kpis{grid-template-columns:1fr}.model-kpi{border-right:none;border-bottom:.5px solid var(--rule)}}
 .hero{padding:92px 0 66px;border-bottom:1.5px solid var(--rule2)}
 .kicker{font-size:10px;text-transform:uppercase;letter-spacing:.16em;color:var(--accent);font-weight:600;margin-bottom:18px}
 .hero h1{font-family:'Source Serif 4',serif;font-size:clamp(52px,8vw,116px);line-height:.9;letter-spacing:-.055em;font-weight:600;max-width:1080px}
@@ -148,6 +172,10 @@ td.mono{font-size:12px}
       <a href="#financing">Financing the Picture</a>
       <a href="#glossary">Glossary</a>
     </nav>
+    <div class="app-tabs">
+      <button class="app-tab active" data-app-view="guide">Guide</button>
+      <button class="app-tab" data-app-view="waterfall-model">Film Waterfall Model</button>
+    </div>
     <div class="contact-buttons">
       <a href="mailto:ponelson@gmail.com" class="contact-btn" title="Email Peter Nelson">
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg><span>Email</span>
@@ -160,6 +188,7 @@ td.mono{font-size:12px}
 </header>
 
 <main>
+<div id="app-view-guide" class="app-view active">
 <section class="hero">
   <div class="shell">
     <div class="kicker">A practical primer · 2026 edition</div>
@@ -545,6 +574,143 @@ td.mono{font-size:12px}
   </div>
 </div>
 </section>
+</div>
+
+<div id="app-view-waterfall-model" class="app-view">
+<section class="model-hero">
+  <div class="shell">
+    <div class="kicker">Interactive financing model</div>
+    <h1>Film Waterfall Model.</h1>
+    <p>A direct interactive translation of the uploaded financing waterfall, from production capital and cash-flow loans through distributor receipts, deductions, equity recoupment, preferred return, GP carry, and fund-level returns.</p>
+    <div class="model-note"><b>Model fidelity.</b> This tab mirrors the workbook’s logic and formulas so the browser version can be used as an interactive companion. It is a scenario model, not a representation of any universal industry waterfall.</div>
+  </div>
+</section>
+
+<section class="section">
+<div class="shell">
+  <div class="section-head"><div class="num">MODEL</div><div><h2>Capital Stack &amp; Assumptions.</h2><div class="section-intro">Change any white input. All financing, revenue, deduction, and return calculations update instantly.</div></div></div>
+
+  <div class="model-grid">
+    <div class="model-panel">
+      <h3>Production &amp; Financing</h3>
+      <div class="sub">Core production capital stack.</div>
+      <table class="input-table">
+        <tr><td>Production Budget ($)</td><td><input id="fw_prod" type="number" value="7000000"></td></tr>
+        <tr><td>P&amp;A Budget ($)</td><td><input id="fw_pa" type="number" value="4500000"></td></tr>
+        <tr><td>International Presales &amp; Tax Credits (%)</td><td><input id="fw_presale_pct" type="number" value="55"></td></tr>
+        <tr><td>Cashflowed Presales &amp; Credits (%)</td><td><input id="fw_cashflow_pct" type="number" value="80"></td></tr>
+        <tr><td>Cashflow Loan Coupon (%)</td><td><input id="fw_cash_coupon" type="number" value="12"></td></tr>
+        <tr><td>Mezz / Gap Coupon (%)</td><td><input id="fw_mezz_coupon" type="number" value="15"></td></tr>
+        <tr><td>GP Development Fee (%)</td><td><input id="fw_dev_fee_pct" type="number" value="4"></td></tr>
+        <tr><td>GP Carry (%)</td><td><input id="fw_gp_carry" type="number" value="20"></td></tr>
+        <tr><td>GP Equity Financing (%)</td><td><input id="fw_gp_equity_pct" type="number" value="3"></td></tr>
+        <tr><td>Equity Financing From Fund (%)</td><td><input id="fw_fund_equity_pct" type="number" value="18"></td></tr>
+        <tr><td>Fund Financing for GP Stake (%)</td><td><input id="fw_fund_gp_pct" type="number" value="50"></td></tr>
+        <tr><td>Preferred Return Rate (%)</td><td><input id="fw_pref" type="number" value="8"></td></tr>
+      </table>
+    </div>
+
+    <div class="model-panel">
+      <h3>Distribution &amp; Waterfall</h3>
+      <div class="sub">Distributor, guild, reserve, and exploitation assumptions.</div>
+      <table class="input-table">
+        <tr><td>Completion Bond (%)</td><td><input id="fw_bond" type="number" value="2"></td></tr>
+        <tr><td>Distributor Fee (%)</td><td><input id="fw_dist_fee" type="number" value="25"></td></tr>
+        <tr><td>Marketing / Overhead (%)</td><td><input id="fw_mkt_oh" type="number" value="7"></td></tr>
+        <tr><td>Exhibitor Split (%)</td><td><input id="fw_exhibitor" type="number" value="50"></td></tr>
+        <tr><td>Pay TV / Cable License (%)</td><td><input id="fw_paytv" type="number" value="5"></td></tr>
+        <tr><td>AVOD Ad-Rev Share (%)</td><td><input id="fw_avod" type="number" value="10"></td></tr>
+        <tr><td>Home Video Net % to Studio</td><td><input id="fw_home_net" type="number" value="65"></td></tr>
+        <tr><td>Merchandising Split to Studio (%)</td><td><input id="fw_merch_split" type="number" value="60"></td></tr>
+        <tr><td>Tax-Credit Holdback Reserve (%)</td><td><input id="fw_tax_holdback" type="number" value="10"></td></tr>
+        <tr><td>CAM Fee (%)</td><td><input id="fw_cam" type="number" value="2"></td></tr>
+        <tr><td>Residuals / Guild Pool (%) of Gross</td><td><input id="fw_residuals" type="number" value="5"></td></tr>
+        <tr><td>Currency Withholding (%)</td><td><input id="fw_currency" type="number" value="15"></td></tr>
+        <tr><td>Audit &amp; Legal Reserve (%) of Gross</td><td><input id="fw_audit" type="number" value="1"></td></tr>
+        <tr><td>Net Point Pool (%)</td><td><input id="fw_net_points" type="number" value="7.5"></td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="model-kpis">
+    <div class="model-kpi"><div class="label">Cashflow Loan Advance</div><div class="value" id="fw_kpi_cashloan">—</div></div>
+    <div class="model-kpi"><div class="label">Mezz / Gap</div><div class="value" id="fw_kpi_mezz">—</div></div>
+    <div class="model-kpi"><div class="label">Equity Financing</div><div class="value" id="fw_kpi_equity">—</div></div>
+    <div class="model-kpi"><div class="label">Total Financing from Fund</div><div class="value" id="fw_kpi_fund_financing">—</div></div>
+  </div>
+</div>
+</section>
+
+<section class="section">
+<div class="shell">
+  <div class="section-head"><div class="num">REVENUE</div><div><h2>Revenue Build.</h2><div class="section-intro">Theatrical gross is reduced by the exhibitor split. Other revenue lines flow directly into distributor receipts under the workbook’s assumptions.</div></div></div>
+  <div class="model-grid">
+    <div class="model-panel">
+      <h3>Revenue Inputs</h3>
+      <table class="input-table">
+        <tr><td>Domestic Box Office Gross ($)</td><td><input id="fw_dom_bo" type="number" value="30000000"></td></tr>
+        <tr><td>International Box Office Gross ($)</td><td><input id="fw_int_bo" type="number" value="20000000"></td></tr>
+        <tr><td>Streaming &amp; TV Licensing ($)</td><td><input id="fw_streaming" type="number" value="3000000"></td></tr>
+        <tr><td>Home Entertainment &amp; Ancillaries ($)</td><td><input id="fw_home" type="number" value="2000000"></td></tr>
+        <tr><td>Non-Theatrical Lump Sum ($)</td><td><input id="fw_non_theatrical" type="number" value="750000"></td></tr>
+        <tr><td>Product Placement Fees ($)</td><td><input id="fw_product" type="number" value="200000"></td></tr>
+        <tr><td>Merchandising Gross Base ($)</td><td><input id="fw_merch_base" type="number" value="2000000"></td></tr>
+        <tr><td>Delivery &amp; Localization ($)</td><td><input id="fw_delivery" type="number" value="100000"></td></tr>
+      </table>
+    </div>
+    <div class="model-panel">
+      <h3>Revenue Output</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Source</th><th class="right">Gross Amount</th><th class="right">Distributor Receipts</th></tr></thead>
+          <tbody id="fw_revenue_body"></tbody>
+          <tfoot><tr><th>Total</th><th class="right mono" id="fw_total_gross">—</th><th class="right mono" id="fw_total_dgr">—</th></tr></tfoot>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<section class="section">
+<div class="shell">
+  <div class="section-head"><div class="num">WATERFALL</div><div><h2>Deductions, Debt &amp; Bond.</h2><div class="section-intro">Distributor receipts are reduced by fees, P&amp;A, guild obligations, withholding, reserves, CAM, debt repayment, origination fees, and completion bond cost.</div></div></div>
+  <div class="model-grid">
+    <div class="model-panel">
+      <h3>Deductions</h3>
+      <div class="table-wrap"><table><thead><tr><th>Deduction</th><th class="right">Amount</th></tr></thead><tbody id="fw_deductions_body"></tbody><tfoot><tr><th>Total</th><th class="right mono" id="fw_deductions_total">—</th></tr></tfoot></table></div>
+    </div>
+    <div class="model-panel">
+      <h3>Debt &amp; Bond</h3>
+      <div class="table-wrap"><table><thead><tr><th>Item</th><th class="right">Amount</th></tr></thead><tbody id="fw_debt_body"></tbody><tfoot><tr><th>Total</th><th class="right mono" id="fw_debt_total">—</th></tr></tfoot></table></div>
+    </div>
+  </div>
+</div>
+</section>
+
+<section class="section">
+<div class="shell">
+  <div class="section-head"><div class="num">RETURNS</div><div><h2>Equity, GP, LP &amp; Fund Returns.</h2><div class="section-intro">The browser model carries the workbook through equity return, preferred return, net points, GP carry, fund participation, and final MOIC.</div></div></div>
+
+  <div class="model-kpis">
+    <div class="model-kpi"><div class="label">Available for Equity Recoup</div><div class="value" id="fw_available_equity">—</div></div>
+    <div class="model-kpi"><div class="label">Surplus After LP Pref</div><div class="value" id="fw_surplus_pref">—</div></div>
+    <div class="model-kpi"><div class="label">Total Fund Return</div><div class="value" id="fw_total_fund_return">—</div></div>
+    <div class="model-kpi"><div class="label">MOIC</div><div class="value" id="fw_moic">—</div></div>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Metric</th><th class="right">Value</th></tr></thead>
+      <tbody id="fw_summary_body"></tbody>
+    </table>
+  </div>
+
+  <div class="model-note"><b>Workbook note translated to the browser:</b> the original model explicitly questions whether the producer contributes net points and suggests that a double-digit GP stake could increase returns. Those are deal-structure assumptions, not automatic features of film financing.</div>
+</div>
+</section>
+</div>
+
 </main>
 
 <footer class="footer">
@@ -632,6 +798,172 @@ function update(){
 }
 document.querySelectorAll('input').forEach(i=>i.addEventListener('input',update));
 update();
+
+// App-level tabs.
+document.querySelectorAll('.app-tab').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('.app-tab').forEach(b=>b.classList.remove('active'));
+    document.querySelectorAll('.app-view').forEach(v=>v.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('app-view-'+btn.dataset.appView).classList.add('active');
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+});
+
+const fwN=id=>parseFloat(document.getElementById(id)?.value)||0;
+const fwP=id=>fwN(id)/100;
+const fwMoney=x=>{
+  const a=Math.abs(x);
+  const s=a>=1000000?'$'+(a/1000000).toFixed(2)+'M':'$'+a.toLocaleString(undefined,{maximumFractionDigits:0});
+  return x<0?'('+s+')':s;
+};
+const fwMultiple=x=>(isFinite(x)?x.toFixed(2):'0.00')+'×';
+
+function fwUpdate(){
+  // Capital stack, matching workbook formulas.
+  const prod=fwN('fw_prod'), pa=fwN('fw_pa');
+  const presalePct=fwP('fw_presale_pct'), cashflowPct=fwP('fw_cashflow_pct');
+  const cashLoan=prod*cashflowPct*presalePct;
+  const cashOrig=cashLoan*0.01;
+  const mezz=(0.55-(cashLoan/prod))*prod;
+  const mezzOrig=mezz*0.01;
+  const equity=prod-cashLoan-mezz;
+  const gpEquity=equity*fwP('fw_gp_equity_pct');
+  const lpEquity=equity-gpEquity;
+  const fundEquity=lpEquity*fwP('fw_fund_equity_pct');
+  const fundGP=gpEquity*fwP('fw_fund_gp_pct');
+  const totalFundFinancing=fundEquity+fundGP;
+  const gpDevFee=prod*fwP('fw_dev_fee_pct');
+
+  // Revenue build.
+  const exhibitor=fwP('fw_exhibitor');
+  const dom=fwN('fw_dom_bo'), intl=fwN('fw_int_bo');
+  const streaming=fwN('fw_streaming'), home=fwN('fw_home');
+  const paytv=fwP('fw_paytv')*(dom+intl);
+  const avod=streaming*fwP('fw_avod');
+  const nonTheatrical=fwN('fw_non_theatrical');
+  const product=fwN('fw_product');
+  const merch=fwP('fw_merch_split')*fwN('fw_merch_base');
+
+  const revs=[
+    ['Domestic Box Office Gross',dom,dom*(1-exhibitor)],
+    ['International Box Office Gross',intl,intl*(1-exhibitor)],
+    ['Streaming & TV Licensing',streaming,streaming],
+    ['Home Entertainment & Ancillaries',home,home],
+    ['Pay TV / Cable',paytv,paytv],
+    ['AVOD (ad-share)',avod,avod],
+    ['Non-Theatrical Lump Sum',nonTheatrical,nonTheatrical],
+    ['Product Placement Fees',product,product],
+    ['Merchandising',merch,merch]
+  ];
+  const totalGross=revs.reduce((s,r)=>s+r[1],0);
+  const totalDGR=revs.reduce((s,r)=>s+r[2],0);
+
+  document.getElementById('fw_revenue_body').innerHTML=revs.map(r=>`<tr><td>${r[0]}</td><td class="right mono">${fwMoney(r[1])}</td><td class="right mono">${fwMoney(r[2])}</td></tr>`).join('');
+  document.getElementById('fw_total_gross').textContent=fwMoney(totalGross);
+  document.getElementById('fw_total_dgr').textContent=fwMoney(totalDGR);
+
+  // Deductions, matching workbook formulas.
+  const deductions=[
+    ['Distribution Fee',totalDGR*fwP('fw_dist_fee')],
+    ['Marketing / Overhead',pa*fwP('fw_mkt_oh')],
+    ['P&A Recoupment',pa],
+    ['Residuals / Guild Pool',totalDGR*fwP('fw_residuals')],
+    ['Currency Withholding',(intl*(1-exhibitor))*fwP('fw_currency')],
+    ['CAM / Escrow Fee',totalDGR*fwP('fw_cam')],
+    ['Audit & Legal Reserve',totalDGR*fwP('fw_audit')],
+    ['Delivery & Localization',fwN('fw_delivery')],
+    ['Tax-Credit Holdback',cashLoan*fwP('fw_tax_holdback')]
+  ];
+  const deductionsTotal=deductions.reduce((s,r)=>s+r[1],0);
+  document.getElementById('fw_deductions_body').innerHTML=deductions.map(r=>`<tr><td>${r[0]}</td><td class="right mono">${fwMoney(r[1])}</td></tr>`).join('');
+  document.getElementById('fw_deductions_total').textContent=fwMoney(deductionsTotal);
+
+  const debt=[
+    ['Presale & Tax-Credit Loan (Advance + Coupon)',cashLoan*(1+fwP('fw_cash_coupon'))],
+    ['Mezz / Gap (Advance + Coupon)',mezz*(1+fwP('fw_mezz_coupon'))],
+    ['Origination Fees',cashOrig+mezzOrig],
+    ['Completion Bond',prod*fwP('fw_bond')]
+  ];
+  const debtTotal=debt.reduce((s,r)=>s+r[1],0);
+  document.getElementById('fw_debt_body').innerHTML=debt.map(r=>`<tr><td>${r[0]}</td><td class="right mono">${fwMoney(r[1])}</td></tr>`).join('');
+  document.getElementById('fw_debt_total').textContent=fwMoney(debtTotal);
+
+  // Summary, matching workbook sequence.
+  const distributorNet=(totalDGR*fwP('fw_dist_fee'))+(pa*fwP('fw_mkt_oh'))+(totalDGR*fwP('fw_cam'));
+  const netStudioReceipts=totalDGR-deductionsTotal;
+  const availableEquity=netStudioReceipts-debtTotal;
+  const returnEquity=equity;
+  const lpPref=equity*fwP('fw_pref');
+  const lpPrefFund=lpPref*fwP('fw_fund_equity_pct');
+  const surplusAfterEquity=availableEquity-returnEquity;
+  const surplusAfterPref=surplusAfterEquity-lpPref;
+  const netPointPool=surplusAfterPref*fwP('fw_net_points');
+  const surplusAfterNet=surplusAfterPref-netPointPool;
+  const gpProfitTake=surplusAfterNet*fwP('fw_gp_carry');
+  const gpTakeFund=gpProfitTake*fwP('fw_fund_gp_pct');
+  const gpTakeFundLP=gpTakeFund*0.8;
+  const gpTakeFundGP=gpTakeFund*0.2;
+  const surplusAfterGP=surplusAfterNet*(1-fwP('fw_gp_carry'));
+  const fundEquityProfit=surplusAfterGP*fwP('fw_fund_equity_pct');
+  const fundEquityMargin=fundEquity?fundEquityProfit/fundEquity:0;
+  const fundEquityToLP=fundEquityProfit*0.8;
+  const fundEquityToGP=fundEquityProfit-fundEquityToLP;
+  const totalLPReturnEquity=fundEquityToLP+lpPrefFund;
+  const totalGPReturn=fundEquityToGP+gpTakeFundGP;
+  const totalLPReturn=totalLPReturnEquity+gpTakeFundLP;
+  const totalFundReturn=fundEquityProfit+gpTakeFund;
+  const totalInvestedReturned=totalFundFinancing+totalFundReturn;
+  const totalFundMargin=totalFundFinancing?totalFundReturn/totalFundFinancing:0;
+  const moic=totalFundFinancing?totalInvestedReturned/totalFundFinancing:0;
+
+  const summary=[
+    ['Total Distributor Gross',totalDGR],
+    ['Distributor Net',distributorNet],
+    ['Net Studio Receipts',netStudioReceipts],
+    ['Available for Equity Recoup',availableEquity],
+    ['Return of Equity',returnEquity],
+    ['LP Preferred Return',lpPref],
+    ['LP Pref of Fund',lpPrefFund],
+    ['Surplus after Equity Recoup',surplusAfterEquity],
+    ['Surplus after LP Pref',surplusAfterPref],
+    ['Net Point Pool',netPointPool],
+    ['Surplus after Net Point Pool',surplusAfterNet],
+    ['GP Profit Take',gpProfitTake],
+    ['GP Take for Fund',gpTakeFund],
+    ['GP Take for Fund for LP',gpTakeFundLP],
+    ['GP Take for Fund for GP',gpTakeFundGP],
+    ['Surplus after GP',surplusAfterGP],
+    ['Fund Equity Profit',fundEquityProfit],
+    ['Fund Equity Margin',fundEquityMargin],
+    ['Fund Equity to LP',fundEquityToLP],
+    ['Fund Equity to GP',fundEquityToGP],
+    ['Total LP Return from Equity',totalLPReturnEquity],
+    ['Total GP Return from Equity + SPV GP Stake',totalGPReturn],
+    ['Total LP Return from Equity + SPV GP Stake',totalLPReturn],
+    ['Total Fund Return from Equity and SPV GP Stake',totalFundReturn],
+    ['Total Invested and Returned',totalInvestedReturned],
+    ['Total Invested',totalFundFinancing],
+    ['Total Fund Equity and GP Stake Margin',totalFundMargin],
+    ['MOIC',moic]
+  ];
+  document.getElementById('fw_summary_body').innerHTML=summary.map((r,i)=>{
+    const isMultiple=['Fund Equity Margin','Total Fund Equity and GP Stake Margin','MOIC'].includes(r[0]);
+    return `<tr><td>${r[0]}</td><td class="right mono">${isMultiple?fwMultiple(r[1]):fwMoney(r[1])}</td></tr>`;
+  }).join('');
+
+  document.getElementById('fw_kpi_cashloan').textContent=fwMoney(cashLoan);
+  document.getElementById('fw_kpi_mezz').textContent=fwMoney(mezz);
+  document.getElementById('fw_kpi_equity').textContent=fwMoney(equity);
+  document.getElementById('fw_kpi_fund_financing').textContent=fwMoney(totalFundFinancing);
+  document.getElementById('fw_available_equity').textContent=fwMoney(availableEquity);
+  document.getElementById('fw_surplus_pref').textContent=fwMoney(surplusAfterPref);
+  document.getElementById('fw_total_fund_return').textContent=fwMoney(totalFundReturn);
+  document.getElementById('fw_moic').textContent=fwMultiple(moic);
+}
+document.querySelectorAll('#app-view-waterfall-model input').forEach(i=>i.addEventListener('input',fwUpdate));
+fwUpdate();
+
 </script>
 </body>
 </html>

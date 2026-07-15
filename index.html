@@ -58,6 +58,14 @@ a{color:inherit}
 .model-kpi .value{font-family:'Source Serif 4',serif;font-size:30px;font-weight:600;margin-top:4px}
 .model-note{font-size:12px;color:var(--ink2);background:var(--elev);border-left:2px solid var(--amber);padding:12px 14px;margin-top:18px}
 .output-positive{color:var(--green)} .output-negative{color:var(--red)}
+.arch-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:18px 0}
+.arch-card{background:var(--paper);border:.5px solid var(--rule);padding:18px;position:relative}
+.arch-card:not(:last-child)::after{content:'→';position:absolute;right:-11px;top:44%;color:var(--accent);z-index:2}
+.arch-card .eyebrow{font-size:10px;text-transform:uppercase;letter-spacing:.09em;color:var(--ink3);margin-bottom:7px}
+.arch-card h4{font-family:'Source Serif 4',serif;font-size:21px;margin-bottom:6px}
+.arch-card p{font-size:12px;color:var(--ink2)}
+@media(max-width:900px){.arch-grid{grid-template-columns:1fr 1fr}.arch-card:nth-child(2)::after{display:none}}
+@media(max-width:560px){.arch-grid{grid-template-columns:1fr}.arch-card::after{display:none}}
 @media(max-width:900px){.model-grid,.model-kpis{grid-template-columns:1fr 1fr}.topbar-inner{gap:10px}.primary-tab{padding-left:7px;padding-right:7px}.contact-btn span{display:none}}
 @media(max-width:560px){.model-grid,.model-kpis{grid-template-columns:1fr}.model-kpi{border-right:none;border-bottom:.5px solid var(--rule)}}
 .hero{padding:92px 0 66px;border-bottom:1.5px solid var(--rule2)}
@@ -595,7 +603,13 @@ td.mono{font-size:12px}
     <div class="kicker">Interactive financing model</div>
     <h1>Film Waterfall Model.</h1>
     <p>A direct interactive translation of the uploaded financing waterfall, from production capital and cash-flow loans through distributor receipts, deductions, equity recoupment, preferred return, GP carry, and fund-level returns.</p>
-    <div class="model-note"><b>Model fidelity.</b> This tab mirrors the workbook’s logic and formulas so the browser version can be used as an interactive companion. It is a scenario model, not a representation of any universal industry waterfall.</div>
+    <div class="model-note"><b>Model architecture.</b> The original workbook logic is preserved where coherent, but the upgraded model separates four entities: the Film SPV, the Producer / Sponsor, the Investment Fund, and the Fund Manager / LP waterfall. This prevents film-level economics and fund-level carry from being blended together.</div>
+    <div class="arch-grid">
+      <div class="arch-card"><div class="eyebrow">Layer 1</div><h4>Film SPV</h4><p>Production capital stack, debt, equity, distributor receipts, recoupment and film-level profit.</p></div>
+      <div class="arch-card"><div class="eyebrow">Layer 2</div><h4>Producer / Sponsor</h4><p>Producer equity, development fee, retained economics and separately negotiated promote participation.</p></div>
+      <div class="arch-card"><div class="eyebrow">Layer 3</div><h4>Investment Fund</h4><p>Direct film equity plus any negotiated participation in producer economics.</p></div>
+      <div class="arch-card"><div class="eyebrow">Layer 4</div><h4>Fund GP / LP</h4><p>Return of capital, LP preferred return, catch-up, carry and residual split.</p></div>
+    </div>
   </div>
 </section>
 
@@ -605,21 +619,35 @@ td.mono{font-size:12px}
 
   <div class="model-grid">
     <div class="model-panel">
-      <h3>Production &amp; Financing</h3>
-      <div class="sub">Core production capital stack.</div>
+      <h3>Film SPV Capital Stack</h3>
+      <div class="sub">Production financing and equity ownership at the film level.</div>
       <table class="input-table">
         <tr><td>Production Budget ($)</td><td><input id="fw_prod" type="number" value="7000000"></td></tr>
         <tr><td>P&amp;A Budget ($)</td><td><input id="fw_pa" type="number" value="4500000"></td></tr>
         <tr><td>International Presales &amp; Tax Credits (%)</td><td><input id="fw_presale_pct" type="number" value="55"></td></tr>
         <tr><td>Cashflowed Presales &amp; Credits (%)</td><td><input id="fw_cashflow_pct" type="number" value="80"></td></tr>
+        <tr><td>Senior Debt Ceiling (% of Budget)</td><td><input id="fw_senior_ceiling" type="number" value="55"></td></tr>
         <tr><td>Cashflow Loan Coupon (%)</td><td><input id="fw_cash_coupon" type="number" value="12"></td></tr>
         <tr><td>Mezz / Gap Coupon (%)</td><td><input id="fw_mezz_coupon" type="number" value="15"></td></tr>
+        <tr><td>Producer Equity ($)</td><td><input id="fw_producer_equity" type="number" value="100000"></td></tr>
+        <tr><td>Third-Party Equity ($)</td><td><input id="fw_thirdparty_equity" type="number" value="0"></td></tr>
+        <tr><td>Film-Level Preferred Return (%)</td><td><input id="fw_film_pref" type="number" value="10"></td></tr>
+      </table>
+    </div>
+
+    <div class="model-panel">
+      <h3>Producer, Fund &amp; Fund-Level Economics</h3>
+      <div class="sub">Separates producer economics from the fund manager’s own carry.</div>
+      <table class="input-table">
+        <tr><td>Fund Direct Film Equity ($)</td><td><input id="fw_fund_equity" type="number" value="1200000"></td></tr>
+        <tr><td>Fund Ownership of Producer Capital Interest (%)</td><td><input id="fw_fund_producer_capital_pct" type="number" value="50"></td></tr>
+        <tr><td>Fund Participation in Producer Promote (%)</td><td><input id="fw_fund_promote_pct" type="number" value="25"></td></tr>
+        <tr><td>Producer Promote (%)</td><td><input id="fw_producer_promote" type="number" value="20"></td></tr>
         <tr><td>GP Development Fee (%)</td><td><input id="fw_dev_fee_pct" type="number" value="4"></td></tr>
-        <tr><td>GP Carry (%)</td><td><input id="fw_gp_carry" type="number" value="20"></td></tr>
-        <tr><td>GP Equity Financing (%)</td><td><input id="fw_gp_equity_pct" type="number" value="3"></td></tr>
-        <tr><td>Equity Financing From Fund (%)</td><td><input id="fw_fund_equity_pct" type="number" value="18"></td></tr>
-        <tr><td>Fund Financing for GP Stake (%)</td><td><input id="fw_fund_gp_pct" type="number" value="50"></td></tr>
-        <tr><td>Preferred Return Rate (%)</td><td><input id="fw_pref" type="number" value="8"></td></tr>
+        <tr><td>Fund LP Preferred Return (%)</td><td><input id="fw_pref" type="number" value="8"></td></tr>
+        <tr><td>Fund GP Catch-Up (%)</td><td><input id="fw_catchup" type="number" value="100"></td></tr>
+        <tr><td>Fund GP Carry (%)</td><td><input id="fw_gp_carry" type="number" value="20"></td></tr>
+        <tr><td>Fund Manager Co-Invest ($)</td><td><input id="fw_manager_coinvest" type="number" value="50000"></td></tr>
       </table>
     </div>
 
@@ -645,11 +673,26 @@ td.mono{font-size:12px}
     </div>
   </div>
 
+  <div class="model-panel" style="margin-top:18px">
+      <h3>Portfolio &amp; Downside Assumptions</h3>
+      <div class="sub">Adds a fund-level view above the single-film waterfall.</div>
+      <div class="controls">
+        <div class="control"><label>Number of Films</label><input id="fw_num_films" type="number" value="10"></div>
+        <div class="control"><label>Total-Loss Rate (%)</label><input id="fw_loss_rate" type="number" value="20"></div>
+        <div class="control"><label>Partial-Recoup Rate (%)</label><input id="fw_partial_rate" type="number" value="30"></div>
+        <div class="control"><label>Full-Recoup / Low-Upside Rate (%)</label><input id="fw_recoup_rate" type="number" value="30"></div>
+        <div class="control"><label>Hit Rate (%)</label><input id="fw_hit_rate" type="number" value="20"></div>
+        <div class="control"><label>Partial-Recoup MOIC</label><input id="fw_partial_moic" type="number" value="0.6"></div>
+        <div class="control"><label>Full-Recoup MOIC</label><input id="fw_recoup_moic" type="number" value="1.2"></div>
+        <div class="control"><label>Hit MOIC</label><input id="fw_hit_moic" type="number" value="3.5"></div>
+      </div>
+    </div>
+
   <div class="model-kpis">
     <div class="model-kpi"><div class="label">Cashflow Loan Advance</div><div class="value" id="fw_kpi_cashloan">—</div></div>
     <div class="model-kpi"><div class="label">Mezz / Gap</div><div class="value" id="fw_kpi_mezz">—</div></div>
     <div class="model-kpi"><div class="label">Equity Financing</div><div class="value" id="fw_kpi_equity">—</div></div>
-    <div class="model-kpi"><div class="label">Total Financing from Fund</div><div class="value" id="fw_kpi_fund_financing">—</div></div>
+    <div class="model-kpi"><div class="label">Fund Direct Film Equity</div><div class="value" id="fw_kpi_fund_equity">—</div></div>
   </div>
 </div>
 </section>
@@ -719,6 +762,8 @@ td.mono{font-size:12px}
     </table>
   </div>
 
+  <div class="model-note"><b>Timing note.</b> Reserves, tax-credit holdbacks, and some currency withholding can be timing items rather than permanent losses. This model conservatively treats them as unavailable cash in the current period.</div>
+
   <div class="model-note"><b>Workbook note translated to the browser:</b> the original model explicitly questions whether the producer contributes net points and suggests that a double-digit GP stake could increase returns. Those are deal-structure assumptions, not automatic features of film financing.</div>
 </div>
 </section>
@@ -771,9 +816,10 @@ function update(){
   const nonStudioFunding=debtPrincipal+n('cofi')+n('presales')+Math.max(0,usableIncentive);
   const studioNetInvestment=Math.max(0,totalProjectCashNeed-nonStudioFunding);
 
-  const preCapitalCash=dgr-distFee-releaseInvestment-residuals-seniorGross-reserve;
+  const preCapitalCash=dgr-distFee-residuals-seniorGross-reserve;
   const cashAvailableToEquity=Math.max(0,preCapitalCash-debtRepayment);
-  const contractualProfitPool=cashAvailableToEquity-studioNetInvestment;
+  const totalEquityCapital=studioNetInvestment+n('cofi');
+  const contractualProfitPool=cashAvailableToEquity-totalEquityCapital;
   const cofiProfitShare=Math.max(0,contractualProfitPool)*n('cofiShare')/100;
   const studioCashReturned=Math.max(0,Math.min(cashAvailableToEquity,studioNetInvestment)) + Math.max(0,contractualProfitPool)-cofiProfitShare;
 
@@ -834,19 +880,26 @@ const fwMoney=x=>{
 const fwMultiple=x=>(isFinite(x)?x.toFixed(2):'0.00')+'×';
 
 function fwUpdate(){
-  // Capital stack, matching workbook formulas.
   const prod=fwN('fw_prod'), pa=fwN('fw_pa');
   const presalePct=fwP('fw_presale_pct'), cashflowPct=fwP('fw_cashflow_pct');
-  const cashLoan=prod*cashflowPct*presalePct;
+  const seniorCeiling=fwP('fw_senior_ceiling');
+
+  // Film SPV capital stack. Negative mezz is prevented and equity flexes.
+  const cashLoan=Math.min(prod*seniorCeiling, prod*cashflowPct*presalePct);
   const cashOrig=cashLoan*0.01;
-  const mezz=(0.55-(cashLoan/prod))*prod;
+  const mezz=Math.max(0, prod*seniorCeiling-cashLoan);
   const mezzOrig=mezz*0.01;
-  const equity=prod-cashLoan-mezz;
-  const gpEquity=equity*fwP('fw_gp_equity_pct');
-  const lpEquity=equity-gpEquity;
-  const fundEquity=lpEquity*fwP('fw_fund_equity_pct');
-  const fundGP=gpEquity*fwP('fw_fund_gp_pct');
-  const totalFundFinancing=fundEquity+fundGP;
+
+  const producerEquity=fwN('fw_producer_equity');
+  const thirdPartyEquity=fwN('fw_thirdparty_equity');
+  const fundEquity=fwN('fw_fund_equity');
+  const requiredEquity=Math.max(0,prod-cashLoan-mezz);
+  const explicitEquity=producerEquity+thirdPartyEquity+fundEquity;
+  const unfundedEquityGap=Math.max(0,requiredEquity-explicitEquity);
+  const totalFilmEquity=explicitEquity+unfundedEquityGap;
+
+  const producerCapitalFundedByFund=producerEquity*fwP('fw_fund_producer_capital_pct');
+  const fundTotalFilmExposure=fundEquity+producerCapitalFundedByFund;
   const gpDevFee=prod*fwP('fw_dev_fee_pct');
 
   // Revenue build.
@@ -858,12 +911,13 @@ function fwUpdate(){
   const nonTheatrical=fwN('fw_non_theatrical');
   const product=fwN('fw_product');
   const merch=fwP('fw_merch_split')*fwN('fw_merch_base');
+  const homeNet=home*fwP('fw_home_net');
 
   const revs=[
     ['Domestic Box Office Gross',dom,dom*(1-exhibitor)],
     ['International Box Office Gross',intl,intl*(1-exhibitor)],
     ['Streaming & TV Licensing',streaming,streaming],
-    ['Home Entertainment & Ancillaries',home,home],
+    ['Home Entertainment & Ancillaries',home,homeNet],
     ['Pay TV / Cable',paytv,paytv],
     ['AVOD (ad-share)',avod,avod],
     ['Non-Theatrical Lump Sum',nonTheatrical,nonTheatrical],
@@ -877,7 +931,7 @@ function fwUpdate(){
   document.getElementById('fw_total_gross').textContent=fwMoney(totalGross);
   document.getElementById('fw_total_dgr').textContent=fwMoney(totalDGR);
 
-  // Deductions, matching workbook formulas.
+  // Distribution / collection deductions.
   const deductions=[
     ['Distribution Fee',totalDGR*fwP('fw_dist_fee')],
     ['Marketing / Overhead',pa*fwP('fw_mkt_oh')],
@@ -903,75 +957,125 @@ function fwUpdate(){
   document.getElementById('fw_debt_body').innerHTML=debt.map(r=>`<tr><td>${r[0]}</td><td class="right mono">${fwMoney(r[1])}</td></tr>`).join('');
   document.getElementById('fw_debt_total').textContent=fwMoney(debtTotal);
 
-  // Summary, matching workbook sequence.
-  const distributorNet=(totalDGR*fwP('fw_dist_fee'))+(pa*fwP('fw_mkt_oh'))+(totalDGR*fwP('fw_cam'));
-  const netStudioReceipts=totalDGR-deductionsTotal;
-  const availableEquity=netStudioReceipts-debtTotal;
-  const returnEquity=equity;
-  const lpPref=equity*fwP('fw_pref');
-  const lpPrefFund=lpPref*fwP('fw_fund_equity_pct');
-  const surplusAfterEquity=availableEquity-returnEquity;
-  const surplusAfterPref=surplusAfterEquity-lpPref;
-  const netPointPool=surplusAfterPref*fwP('fw_net_points');
-  const surplusAfterNet=surplusAfterPref-netPointPool;
-  const gpProfitTake=surplusAfterNet*fwP('fw_gp_carry');
-  const gpTakeFund=gpProfitTake*fwP('fw_fund_gp_pct');
-  const gpTakeFundLP=gpTakeFund*0.8;
-  const gpTakeFundGP=gpTakeFund*0.2;
-  const surplusAfterGP=surplusAfterNet*(1-fwP('fw_gp_carry'));
-  const fundEquityProfit=surplusAfterGP*fwP('fw_fund_equity_pct');
-  const fundEquityMargin=fundEquity?fundEquityProfit/fundEquity:0;
-  const fundEquityToLP=fundEquityProfit*0.8;
-  const fundEquityToGP=fundEquityProfit-fundEquityToLP;
-  const totalLPReturnEquity=fundEquityToLP+lpPrefFund;
-  const totalGPReturn=fundEquityToGP+gpTakeFundGP;
-  const totalLPReturn=totalLPReturnEquity+gpTakeFundLP;
-  const totalFundReturn=fundEquityProfit+gpTakeFund;
-  const totalInvestedReturned=totalFundFinancing+totalFundReturn;
-  const totalFundMargin=totalFundFinancing?totalFundReturn/totalFundFinancing:0;
-  const moic=totalFundFinancing?totalInvestedReturned/totalFundFinancing:0;
+  // Film-level waterfall: capped at available cash, no negative distributions.
+  const netStudioReceipts=Math.max(0,totalDGR-deductionsTotal);
+  let cash=Math.max(0,netStudioReceipts-debtTotal);
+
+  const returnFilmEquity=Math.min(cash,totalFilmEquity);
+  cash-=returnFilmEquity;
+
+  const filmPrefAccrued=totalFilmEquity*fwP('fw_film_pref');
+  const filmPrefPaid=Math.min(cash,filmPrefAccrued);
+  cash-=filmPrefPaid;
+
+  const netPointPool=Math.min(cash,cash*fwP('fw_net_points'));
+  cash-=netPointPool;
+
+  const producerPromote=Math.min(cash,cash*fwP('fw_producer_promote'));
+  cash-=producerPromote;
+
+  const residualFilmProfit=cash;
+
+  // Allocate equity return and pref pro rata by actual invested equity.
+  const fundEquityShare=totalFilmEquity?fundTotalFilmExposure/totalFilmEquity:0;
+  const fundReturnOfCapital=returnFilmEquity*fundEquityShare;
+  const fundFilmPref=filmPrefPaid*fundEquityShare;
+  const fundResidualProfit=residualFilmProfit*fundEquityShare;
+
+  // Producer economics acquired by fund are separate from capital ownership.
+  const fundProducerPromote=producerPromote*fwP('fw_fund_promote_pct');
+  const fundDevelopmentFee=gpDevFee*fwP('fw_fund_producer_capital_pct');
+
+  const totalCashToFund=fundReturnOfCapital+fundFilmPref+fundResidualProfit+fundProducerPromote+fundDevelopmentFee;
+
+  // Fund-level GP / LP waterfall.
+  const managerCoinvest=fwN('fw_manager_coinvest');
+  const lpCapital=Math.max(0,fundTotalFilmExposure-managerCoinvest);
+  let fundCash=totalCashToFund;
+
+  const lpCapitalReturned=Math.min(fundCash,lpCapital);
+  fundCash-=lpCapitalReturned;
+
+  const managerCapitalReturned=Math.min(fundCash,managerCoinvest);
+  fundCash-=managerCapitalReturned;
+
+  const lpPrefAccrued=lpCapital*fwP('fw_pref');
+  const lpPrefPaid=Math.min(fundCash,lpPrefAccrued);
+  fundCash-=lpPrefPaid;
+
+  const carryRate=fwP('fw_gp_carry');
+  const catchupTarget=carryRate<1 ? (lpPrefPaid*carryRate/(1-carryRate))*fwP('fw_catchup') : 0;
+  const gpCatchup=Math.min(fundCash,catchupTarget);
+  fundCash-=gpCatchup;
+
+  const residualToGP=fundCash*carryRate;
+  const residualToLP=fundCash-residualToGP;
+
+  const totalLPReturn=lpCapitalReturned+lpPrefPaid+residualToLP;
+  const totalGPReturn=managerCapitalReturned+gpCatchup+residualToGP;
+  const totalFundReturn=totalLPReturn+totalGPReturn;
+  const totalInvested=fundTotalFilmExposure;
+  const totalFundProfit=totalFundReturn-totalInvested;
+  const moic=totalInvested?totalFundReturn/totalInvested:0;
+
+  // Portfolio model.
+  const numFilms=fwN('fw_num_films');
+  const lossRate=fwP('fw_loss_rate'), partialRate=fwP('fw_partial_rate'), recoupRate=fwP('fw_recoup_rate'), hitRate=fwP('fw_hit_rate');
+  const rateSum=lossRate+partialRate+recoupRate+hitRate || 1;
+  const weightedGrossMOIC=(
+    0*(lossRate/rateSum)+
+    fwN('fw_partial_moic')*(partialRate/rateSum)+
+    fwN('fw_recoup_moic')*(recoupRate/rateSum)+
+    fwN('fw_hit_moic')*(hitRate/rateSum)
+  );
+  const portfolioInvested=totalInvested*numFilms;
+  const portfolioGrossReturn=portfolioInvested*weightedGrossMOIC;
 
   const summary=[
+    ['Required Film Equity',requiredEquity],
+    ['Explicit Film Equity',explicitEquity],
+    ['Unfunded Equity Gap',unfundedEquityGap],
+    ['Producer Development Fee',gpDevFee],
     ['Total Distributor Gross',totalDGR],
-    ['Distributor Net',distributorNet],
     ['Net Studio Receipts',netStudioReceipts],
-    ['Available for Equity Recoup',availableEquity],
-    ['Return of Equity',returnEquity],
-    ['LP Preferred Return',lpPref],
-    ['LP Pref of Fund',lpPrefFund],
-    ['Surplus after Equity Recoup',surplusAfterEquity],
-    ['Surplus after LP Pref',surplusAfterPref],
+    ['Cash after Debt',Math.max(0,netStudioReceipts-debtTotal)],
+    ['Return of Film Equity',returnFilmEquity],
+    ['Film-Level Preferred Return Paid',filmPrefPaid],
     ['Net Point Pool',netPointPool],
-    ['Surplus after Net Point Pool',surplusAfterNet],
-    ['GP Profit Take',gpProfitTake],
-    ['GP Take for Fund',gpTakeFund],
-    ['GP Take for Fund for LP',gpTakeFundLP],
-    ['GP Take for Fund for GP',gpTakeFundGP],
-    ['Surplus after GP',surplusAfterGP],
-    ['Fund Equity Profit',fundEquityProfit],
-    ['Fund Equity Margin',fundEquityMargin],
-    ['Fund Equity to LP',fundEquityToLP],
-    ['Fund Equity to GP',fundEquityToGP],
-    ['Total LP Return from Equity',totalLPReturnEquity],
-    ['Total GP Return from Equity + SPV GP Stake',totalGPReturn],
-    ['Total LP Return from Equity + SPV GP Stake',totalLPReturn],
-    ['Total Fund Return from Equity and SPV GP Stake',totalFundReturn],
-    ['Total Invested and Returned',totalInvestedReturned],
-    ['Total Invested',totalFundFinancing],
-    ['Total Fund Equity and GP Stake Margin',totalFundMargin],
-    ['MOIC',moic]
+    ['Producer Promote',producerPromote],
+    ['Residual Film Profit',residualFilmProfit],
+    ['Fund Return of Capital',fundReturnOfCapital],
+    ['Fund Film-Level Pref',fundFilmPref],
+    ['Fund Residual Film Profit',fundResidualProfit],
+    ['Fund Share of Producer Promote',fundProducerPromote],
+    ['Fund Share of Development Fee',fundDevelopmentFee],
+    ['Total Cash to Fund',totalCashToFund],
+    ['LP Capital Returned',lpCapitalReturned],
+    ['LP Preferred Return Paid',lpPrefPaid],
+    ['GP Catch-Up',gpCatchup],
+    ['Residual to LP',residualToLP],
+    ['Residual to Fund Manager',residualToGP],
+    ['Total LP Return',totalLPReturn],
+    ['Total Fund Manager Return',totalGPReturn],
+    ['Total Fund Return',totalFundReturn],
+    ['Total Fund Profit',totalFundProfit],
+    ['MOIC',moic],
+    ['Portfolio Films',numFilms],
+    ['Portfolio Weighted Gross MOIC',weightedGrossMOIC],
+    ['Illustrative Portfolio Invested',portfolioInvested],
+    ['Illustrative Portfolio Gross Return',portfolioGrossReturn]
   ];
-  document.getElementById('fw_summary_body').innerHTML=summary.map((r,i)=>{
-    const isMultiple=['Fund Equity Margin','Total Fund Equity and GP Stake Margin','MOIC'].includes(r[0]);
+  document.getElementById('fw_summary_body').innerHTML=summary.map(r=>{
+    const isMultiple=['MOIC','Portfolio Weighted Gross MOIC'].includes(r[0]);
     return `<tr><td>${r[0]}</td><td class="right mono">${isMultiple?fwMultiple(r[1]):fwMoney(r[1])}</td></tr>`;
   }).join('');
 
   document.getElementById('fw_kpi_cashloan').textContent=fwMoney(cashLoan);
   document.getElementById('fw_kpi_mezz').textContent=fwMoney(mezz);
-  document.getElementById('fw_kpi_equity').textContent=fwMoney(equity);
-  document.getElementById('fw_kpi_fund_financing').textContent=fwMoney(totalFundFinancing);
-  document.getElementById('fw_available_equity').textContent=fwMoney(availableEquity);
-  document.getElementById('fw_surplus_pref').textContent=fwMoney(surplusAfterPref);
+  document.getElementById('fw_kpi_equity').textContent=fwMoney(totalFilmEquity);
+  document.getElementById('fw_kpi_fund_equity').textContent=fwMoney(fundTotalFilmExposure);
+  document.getElementById('fw_available_equity').textContent=fwMoney(Math.max(0,netStudioReceipts-debtTotal));
+  document.getElementById('fw_surplus_pref').textContent=fwMoney(residualFilmProfit);
   document.getElementById('fw_total_fund_return').textContent=fwMoney(totalFundReturn);
   document.getElementById('fw_moic').textContent=fwMultiple(moic);
 }
